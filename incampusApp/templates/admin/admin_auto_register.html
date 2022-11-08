@@ -1,0 +1,36 @@
+{% extends './admin_base.html' %}
+{% block title %}ADMIN AUTO REGISTER{% endblock title %}
+{% block content %}
+<div class="row mb-3">
+    <div class="col-">
+        <h1><自動登録></h1>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-">
+        <p>&emsp;データのタイプを選択してください</p>
+    </div>
+</div>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row mb-4">
+        <div class="col-">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="data-type" id="inlineRadioStudent" value="student">
+                <label class="form-check-label" for="inlineRadioStudent">学生</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="data-type" id="inlineRadioTeacher" value="teacher">
+                <label class="form-check-label" for="inlineRadioTeacher">教員</label>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-">
+            <label for="formFile" class="form-label">登録するCSVファイル</label>
+            <input class="form-control" type="file" id="formFile" name="data_file" accept=".csv,.txt" required>   
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit">登録</button>
+</form>
+{% endblock content %}

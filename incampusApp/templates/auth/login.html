@@ -1,0 +1,40 @@
+{% extends '../base.html' %}
+{% block title %}
+LOGIN
+{% endblock title %}
+{% block content %}
+<div class="row pb-4">
+    <div class="col">
+        <h1><ログイン></h1>
+    </div>
+</div>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="usre_id" class="form-label">
+            {% if kind == 0 %}
+                学籍番号
+            {% elif kind == 1 %}
+                教員番号
+            {% endif %}
+        </label>
+        <input type="text" class="form-control" id="InputUserId" name="user_id" required>
+    </div>
+    <div class="mb-3">
+        <label for="inputPassword" class="form-label">パスワード</label>
+        <input type="password" class="form-control" id="inputPassword" name="password" required>
+    </div>
+    <div class="mb-4 form-check">
+        <input type="checkbox" class="form-check-input" id="displayCheck">
+        <label class="form-check-label" for="displayCheck">パスワード表示</label>
+    </div>
+    <button type="submit" class="btn btn-primary">ログイン</button>
+</form>
+{% endblock content %}
+{% block script %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/incampus.js' %}"></script>
+<script>
+    displayPassword();
+</script>
+{% endblock script %}

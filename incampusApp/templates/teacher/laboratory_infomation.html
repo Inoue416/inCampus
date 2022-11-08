@@ -1,0 +1,73 @@
+{% extends '../base.html' %}
+{% block title %}
+LABORATORY INFOMATION
+{% endblock title %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-">
+        <h1><研究室の情報></h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-">
+        <p class="small">&emsp;※設定後は、ブラウザバックせず、ホームボタンかメニューからページを移動してください</p>
+    </div>
+</div>
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="mb-4">
+        <label for="lab_name" class="form-label">研究室名</label>
+        <input type="text" name="lab_name" value="{{ data.lab_name }}" class="form-control" required>
+    </div>
+    <div class="mb-4">
+        <label for="s_core_time_start" class="form-label">学部コアタイム:</label>
+        {% if data.s_core_time_start == None %}
+        <input type="time" max="24:00" min="00:00" name="s_core_time_start">
+        {% else %}
+        <input type="time" max="24:00" min="00:00" name="s_core_time_start" value="{{ data.s_core_time_start.hour }}:{{ data.s_core_time_start.minute }}">
+        {% endif %}
+        ~
+        {% if data.s_core_time_end == None %}
+        <input type="time" max="24:00" min="00:00" name="s_core_time_end">
+        {% else %}
+        <input type="time" max="24:00" min="00:00" name="s_core_time_end" value="{{ data.s_core_time_end.hour }}:{{ data.s_core_time_end.minute }}">
+        {% endif %}
+    </div>
+    <div class="mb-4">
+        <label for="m_core_time_start">修士コアタイム:</label>
+        {% if data.m_core_time_start == None %}
+        <input type="time" max="24:00" min="00:00" name="m_core_time_start">
+        {% else %}
+        <input type="time" max="24:00" min="00:00" name="m_core_time_start" value="{{ data.m_core_time_start.hour }}:{{ data.m_core_time_start.minute }}">
+        {% endif %}
+        ~
+        {% if data.m_core_time_end == None %}
+        <input type="time" max="24:00" min="00:00" name="m_core_time_end">
+        {% else %}
+        <input type="time" max="24:00" min="00:00" name="m_core_time_end" value="{{ data.m_core_time_end.hour }}:{{ data.m_core_time_end.minute }}">
+        {% endif %}
+    </div>
+    <div class="mb-5">
+        <label for="d_core_time_start">博士コアタイム:</label>
+        {% if data.d_core_time_start == None %}
+        <input type="time" max="24:00" min="00:00" name="d_core_time_start">
+        {% else %}
+        <input type="time" max="24:00" min="00:00" name="d_core_time_start" value="{{ data.d_core_time_start.hour }}:{{ data.d_core_time_start.minute }}">
+        {% endif %}
+        ~
+        {% if data.d_core_time_end == None %}
+        <input type="time" max="24:00" min="00:00" name="d_core_time_end">
+        {% else %}
+        <input type="time" max="24:00" min="00:00" name="d_core_time_end" value="{{ data.d_core_time_end.hour }}:{{ data.d_core_time_end.minute }}">
+        {% endif %}    
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <button type="submit" class="btn btn-primary">設定</button>
+        </div>
+        <div class="col-4">
+            <a class="btn btn-outline-secondary" href="{% url 'incampusApp:home' %}">ホーム</a>
+        </div>
+    </div>
+</form>
+{% endblock content%}

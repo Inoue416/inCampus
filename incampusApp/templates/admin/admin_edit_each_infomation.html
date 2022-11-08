@@ -1,0 +1,40 @@
+{% extends './admin_base.html' %}
+{% block title %}ADMIN EDIT EACH INFOMATION{% endblock title %}
+{% block content %}
+<div class="row mb-3">
+    <div class="col-">
+        <h1><ユーザー情報></h1>
+    </div>
+</div>
+<form action="" method="POST">
+    {% csrf_token %}
+    {% if kind == 'student' %}
+    <div class="row">
+        <div class="col-">
+            <label for="u_id" class="form-label">学籍番号</label>
+            <input type="text" class="form-control" name="u_id" value="{{ data.u_id }}" required>        
+            <label for="u_name" class="form-label">氏名</label>
+            <input type="text" class="form-control" name="u_name" value="{{ data.u_name }}" required>  
+            <label for="email" class="form-label">メールアドレス</label>
+            <input type="email" class="form-control" name="email" value="{{ data.email }}" required>
+            <label for="t_id" class="form-label">教員ID</label>
+            <input type="text" class="form-control" name="t_id" value="{{ data.t_id }}" required>
+            <label for="major" class="form-label">学科・専攻</label>
+            <input type="text" class="form-control" name="major" value="{{ data.major }}" required>              
+        </div>
+    </div>
+    {% elif kind == 'teacher' %}
+    <div class="row">
+        <div class="col-">
+            <label for="t_id" class="form-label">教員ID</label>
+            <input type="text" class="form-control" name="t_id" value="{{ data.t_id }}" required>
+            <label for="t_name" class="form-label">氏名</label>
+            <input type="text" class="form-control" name="t_name" value="{{ data.t_name }}" required>
+            <label for="email" class="fom-label">メールアドレス</label>
+            <input type="email" class="form-control" name="email" value="{{ data.email }}" required>
+        </div>
+    </div>
+    {% endif %}
+    <button type='submit' class="btn btn-primary mt-4">更新</button>
+</form>
+{% endblock content %}

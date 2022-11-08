@@ -1,0 +1,77 @@
+{% extends '../base.html' %}
+{% block title %}STUDENT DATA DETAIL{% endblock title %}
+{% block content %}
+<div class="row">
+    <div class="col-">
+        <h1><詳細></h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-">
+        <p class="small">&emsp;※更新後は、ブラウザバックせず、戻るボタンかメニューからページを移動してください</p>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-">
+        <table class="table table-sm text-center">
+            <thead>
+            <tr class="small">
+                <th scope="col" style="width: 25%;">日付</th>
+                <th scope="col" style="width: 25%;">在室時間</th>
+                <th scope="col" style="width: 25%;">登校時間</th>
+                <th scope="col" style="width: 25%;">下校時間</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        {{ data.year }}/{{ data.month }}/{{ data.day }}
+                    </td>
+                    <td>
+                        {% if data.hours < 10 %}0{% endif %}{{ data.hours }}:{% if data.minutes < 10 %}0{% endif %}{{ data.minutes }}
+                    </td>
+                    <td>
+                        {% if data.start_time.hour < 10 %}0{% endif %}{{ data.start_time.hour }}:{% if data.start_time.minute < 10 %}0{% endif %}{{ data.start_time.minute }}
+                    </td>
+                    <td>
+                        {% if data.end_time != None %}
+                        {% if data.end_time.hour < 10 %}0{% endif %}{{ data.end_time.hour }}:{% if data.end_time.minute < 10 %}0{% endif %}{{ data.end_time.minute }}
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+    <!--- ここはフォームにしてメモの編集を可能にする --->
+<form action="" method="POST">
+    {% csrf_token %}
+    {% if  data.u_id in request.session.id %}
+    <div class="form-floating">
+        <textarea class="form-control" id="floatingTextareaStudent" name="memo" style="height: 100px">{{ data.memo }}</textarea>
+        <label for="floatingTextareaStudent">学生メモ</label>
+    </div>
+    <div class="form-floating mt-3 mb-3">
+        <textarea class="form-control" id="floatingTextareaTeacher" name="comment" style="height: 100px" readonly>{{ data.comment }}</textarea>
+        <label for="floatingTextareaStudent">教員コメント</label>
+    </div>
+    {% else %}
+    <div class="form-floating">
+        <textarea class="form-control" id="floatingTextareaStudent" name="memo" style="height: 100px" readonly>{{ data.memo }}</textarea>
+        <label for="floatingTextareaStudent">学生メモ</label>
+    </div>
+    <div class="form-floating mt-3 mb-5">
+        <textarea class="form-control" id="floatingTextareaTeacher" name="comment" style="height: 100px">{{ data.comment }}</textarea>
+        <label for="floatingTextareaStudent">教員コメント</label>
+    </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-3">
+            <button class="btn btn-primary" type='submit'>更新</button>
+        </div>
+        <div class="col-3">
+            <a class="btn btn-outline-secondary" href="{% url 'incampusApp:each_student_data' u_id=data.u_id  %}">戻る</a>
+        </div>
+    </div>
+</form>
+{% endblock content %}

@@ -1,0 +1,212 @@
+{% extends '../base.html' %}
+{% block title %}
+EACH STUDENT DATA
+{% endblock %}
+{% block header %}
+{% load static %}
+{% if request.session.target == 0 %}
+<link href="{% static 'c3/c3.css' %}" rel="stylesheet">
+{% endif %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock header %}
+{% block content %}
+<div class="row">
+    <div class="col-">    
+        <p>[{{ u_id }}] {{ u_name }}さん</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-">
+        </div>
+        <table class="table table-sm text-center">
+            <thead>
+            <tr>
+                <th scope="col">目標時間</th>
+                <th scope="col">合計時間</th>
+                <th scope="col">残り時間</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        {{ goal_time }}:00
+                    </td>
+                    <td>
+                        {{ total_time.0 }}:{{ total_time.1 }}
+                    </td>
+                    <td>
+                        {{ remainder.0 }}:{{ remainder.1 }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% if request.session.target == 0 %}
+<h2 class="mb-3"><合計在室時間></h2>
+<div id="my-container" style="width: 100%; border: solid 1px black">
+    <div id="total-graph"></div>
+</div>
+{% endif %}
+<div class="row">
+    <div class="col-">
+        <h4 class="pt-3">
+            <p class="text-center">
+            ( {{ fiscal_year }}年度 在室記録一覧
+            {% if focus_term == 0%}
+            前期
+            {% else %}
+            後期
+            {% endif %})
+            </p>
+        </h4>
+    </div>
+</div>
+    {% if user_data != None %}
+    {% for key, value in user_data.items %}
+        {% for each_k, each_v in each_total.items %}
+            {% if each_k == key %}
+                <div class="text-left mb-3">
+                    <button class="btn btn-outline-secondary dropdown-toggle btn-lg" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseEachData{{ key }}" aria-expanded="false" aria-controls="collapseEachData{{ key }}"><strong>
+                        {{ key }}月の合計在室時間 : {{ each_v.0 }}時間 {{ each_v.1 }}分
+                    </strong>
+                    </button>
+                </div>
+            {% endif %}
+        {% endfor %}
+        {% if focus_month == key %}
+        <div class="collapse show" id="collapseEachData{{ key }}">
+        {% else %}
+        <div class="collapse" id="collapseEachData{{ key }}">
+        {% endif %}
+            <table class="table table-sm text-center table-hover text-nowrap mb-5">
+                <thead>
+                <tr class="small">
+                    <th scope="col" style="max-width: 9%;">#</th>
+                    <th scope="col" style="max-width: 13%;">日付</th>
+                    <th scope="col" style="max-width: 13%;">在室時間</th>
+                    <th scope="col" style="max-width: 13%;">メモ</th>
+                    <th scope="col" style="max-width: 13%;">コメント</th>
+                    <th scope="col" style="max-width: 13%;">遅刻</th>
+                    <th scope="col" style="max-width: 13%;">早退</th>
+                </tr>
+                </thead>
+                <tbody>
+            {% for v in value %}
+                <tr data-href="{% url 'incampusApp:student_date_detail' r_id=v.r_id %}">
+                    <td>
+                        {% if request.session.target == 0 %}
+                        {% if v.s_notice %}
+                            <i class="bi bi-exclamation-circle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                                </svg>                    
+                            </i>
+                        {% endif %}
+                        {% elif request.session.target == 1 %}
+                        {% if v.t_notice %}
+                            <i class="bi bi-exclamation-circle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                                </svg>                    
+                            </i>
+                        {% endif %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ v.year }}/{{ key }}/{{ v.day }}
+                    </td>
+                    <td>
+                        {{v.hours}}:{{v.minutes}}
+                    </td>
+                    <td class="td-overflow-hidden">
+                        {% if v.memo != None %}{{v.memo}}{% endif %}
+                    </td>
+                    <td class="td-overflow-hidden">
+                        {% if v.comment != None %}{{ v.comment }}{% endif %}
+                    </td>
+                    <td>
+                        {% if v.core_time_judge.0 == True %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                        </svg>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if v.core_time_judge.1 == True %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                        </svg>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    {% endfor %}
+
+    {% else %}
+    <p>データがありません</p>
+    {% endif %}
+{% endblock content %}
+<!-- 早退などのこと -->
+{% block script %}
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+<script type="text/javascript" src="{% static 'js/incampus.js' %}"></script>
+{% if request.session.target == 0 %}
+<script src="{% static 'd3/d3.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'c3/c3.min.js' %}"></script>
+<script>
+    let ttd = JSON.parse('{{ ttd | safe}}');
+    let egt = JSON.parse('{{ egt | safe }}');
+    const aryMax = function (a, b) {return Math.max(a, b);}
+    let maxTime = ttd.reduce(aryMax);
+    ttd.sort();
+    let chart = c3.generate({
+      bindto: '#total-graph',
+      size: { width: '', height: 350 }, // グラフ描画領域のサイズ
+      data: {
+        columns: ttd,
+        type: 'bar',
+        labels: true // それぞれの点に数値を表示
+      },
+      bar: {
+          width: {
+              ratio: 0.8,
+          }
+      },
+      axis: {
+        y: {
+            label: '合計在室時間[h]'
+        },
+      },
+      grid: {
+        y: {
+            lines: [
+                {value: egt.S, class: 'grid500', text: '学部'}, 
+                {value: egt.D, class: 'grid500', text: '博士'},
+                {value: egt.M, class: 'grid500', text: '修士'}
+            ]
+        }
+    }
+    });
+    chart.axis.max(egt.S);
+    setTimeout(function(){
+        chart.axis.max(egt.M);
+    }, 500);
+    setTimeout(function() {
+        chart.axis.max(egt.D);
+    }, 1500);
+    setTimeout(function() {
+        chart.axis.max(maxTime);
+    }, 2000);
+</script>
+{% endif %}
+{% endblock script %}

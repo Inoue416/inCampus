@@ -1,0 +1,15 @@
+.hidd-elem {
+    visibility: hidden;
+}
+.td-overflow-hidden {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 0;
+}
+.c3-ygrid-line.grid500 line {
+    stroke: black;
+}
+.c3-ygrid-line.grid500 text {
+    fill: black;
+}

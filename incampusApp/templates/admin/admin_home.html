@@ -1,0 +1,27 @@
+{% extends './admin_base.html' %}
+{% block title %}
+ADMIN HOME
+{% endblock title %}
+{% block content %}
+    {% if 'id' in request.session %}
+    <div class="row mb-3">
+        <div class="col-">
+            <h1><機能一覧></h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-">
+            <p>&emsp;以下のボタンから機能を選択してください。</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-">
+            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                <a class="btn btn-outline-primary" href="{% url 'incampusApp:admin_auto_register' %}">自動登録</a>
+                <a class="btn btn-outline-primary" href="{% url 'incampusApp:admin_manual_register' %}">手動登録</a>
+                <a class="btn btn-outline-primary" href="{% url 'incampusApp:admin_edit_infomation' %}">編集</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock content %}

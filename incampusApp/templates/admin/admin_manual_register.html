@@ -1,0 +1,81 @@
+{% extends './admin_base.html' %}
+{% block title %}ADMIN MANUAL{% endblock title %}
+{% block header %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock header %}
+{% block content %}
+<div class="row mb-3">
+    <div class="col-">
+        <h1><手動登録></h1>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-">
+        <p>&emsp;データのタイプを選択してください</p>
+    </div>
+</div>
+<div class="mb-3">
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="data-type" id="student" value="student" onclick="changeForm('student')" required>
+        <label class="form-check-label" for="student">学生</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="data-type" id="teacher" value="teacher" onclick="changeForm('teacher')" required>
+        <label class="form-check-label" for="teacher">教員</label>
+    </div>
+</div>
+
+<div class="collapse" id="collapseFormStudent">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row mb-4">
+            <div class="col-">
+                <label for="user_id" class="form-label">学籍番号</label>
+                <input type="text" name="user_id" class="form-control" required>
+                <label for="name" class="form-label">氏名</label>
+                <input type="text" name="name" class="form-control" required>
+                <label for="eamil" class="fomr-label">メールアドレス</label>
+                <input type="email" name="email" class="form-control" required>
+                <label for="t_id" class="form-label">教員ID</label>
+                <input type="text" name="t_id" class="form-control" required>
+                <label for="major" class="form-label">学科・専攻</label>
+                <input type="text" name="major" class="form-control" required>
+
+                <input type="text" name="data-type" value="student" hidden>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">登録</button>
+    </form>
+</div>
+<div class="collapse" id="collapseFormTeacher">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row mb-4">
+            <div class="col-">
+                <label for="user_id" class="form-label">教員ID</label>
+                <input type="text" name="user_id" class="form-control" required>
+                <label for="name" class="form-label">氏名</label>
+                <input type="text" name="name" class="form-control" required>
+                <label for="lab_name">研究室名</label>
+            </div>
+            <div class="col-8">
+                <input type="text" name="lab_name" class="form-control" required>
+            </div>
+            <div class="col-4">
+                研究室
+            </div>
+            <div class="col-">
+                <label for="eamil" class="form-label">メールアドレス</label>
+                <input type="email" name="email" class="form-control" required>
+                
+                <input type="text" name="data-type" value="teacher" hidden>        
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">登録</button>
+    </form>
+</div>    
+{% endblock content %}
+{% block script %}
+<script type="text/javascript" src="{% static 'js/incampus.js' %}"></script>
+{% endblock script %}

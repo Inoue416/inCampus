@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% block title %}HOME{% endblock title %}
+{% block header%}
+{% load static %}
+<link href="{% static 'c3/c3.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css'%}">
+<style>
+.c3-ygrid-line.grid500 line {
+    stroke: black;
+}
+.c3-ygrid-line.grid500 text {
+    fill: black;
+}
+</style>
+{% if not 'id' in request.session %}
+<style>
+.back-img {
+    background-image: url("{% static 'img/InCampus.png' %}");
+    background-position: 50% -10%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+</style>
+{% endif %}
+{% endblock header %}
+{% block content %}
+{% if 'id' in request.session %}
+    {% if request.session.target == 1 %}
+        <h2 class="mb-3">{{ fiscal_year }}年度 
+        {% if focus_term == 0 %}
+        前期
+        {% else %}
+        後期
+        {% endif %}
+        担当学生一覧</h2>
+        <div id="my-container" class="mb-4" style="width: 100%; border: solid 1px black">
+            <div id="all-user-graph"></div>
+        </div>
+
+        {% if  student_list != None %}
+        <div class="dropdown">
+            <h4><学部> コアタイム: {% if core_time.4 != None %}{{ core_time.4 }}{% endif %}~{% if core_time.5 != None %}{{ core_time.5 }}{% endif %}</h4>
+            <div class="row">
+                <div class="col-">
+                    <table class="table table-msm table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 20%;">学籍番号</th>
+                            <th scope="col" style="width: 20%;">氏名</th>
+                            <th scope="col" style="width: 20%;">合計時間</th>
+                            <th scope="col" style="width: 20%;">目標時間</th>
+                            <th scope="col" style="width: 20%;">残り時間</th>
+                        </tr>
+                        </thead>
+                            <tbody>
+            {% for key, value in student_list.s_list.items %}
+                            <tr data-href="{% url 'incampusApp:each_student_data' u_id=key %}">
+                                <td>
+                                    {{ key }}
+                                </td>
+                                <td>
+                                    {{ value.0 }}
+                                </td>
+                                <td>
+                                    {{ value.1 }}:{{ value.2 }}
+                                </td>
+                                <td>
+                                    {{ value.3 }}:00
+                                </td>
+                                <td>
+                                    {{ value.4 }}:{{ value.5 }}
+                                </td>
+                            </tr>
+            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h4><修士> コアタイム: {% if core_time.2 != None %}{{ core_time.2 }}{% endif %}~{% if core_time.3 != None %}{{ core_time.3 }}{% endif %}</h4>
+            <div class="row">
+                <div class="col-">
+                    <table class="table table-sm table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 20%;">学籍番号</th>
+                            <th scope="col" style="width: 20%;">氏名</th>
+                            <th scope="col" style="width: 20%;">合計時間</th>
+                            <th scope="col" style="width: 20%;">目標時間</th>
+                            <th scope="col" style="width: 20%;">残り時間</th>
+                        </tr>
+                        </thead>
+                            <tbody>
+            {% for key, value in student_list.m_list.items %}
+                            <tr data-href="{% url 'incampusApp:each_student_data' u_id=key %}">
+                                <td>
+                                    {{ key }}
+                                </td>
+                                <td>
+                                    {{ value.0 }}
+                                </td>
+                                <td>
+                                    {{ value.1 }}:{{ value.2 }}
+                                </td>
+                                <td>
+                                    {{ value.3 }}:00
+                                </td>
+                                <td>
+                                    {{ value.4 }}:{{ value.5 }}
+                                </td>
+                            </tr>
+            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h4><博士> コアタイム: {% if core_time.0 != None %}{{ core_time.0 }}{% endif %}~{% if core_time.1 != None %}{{ core_time.1 }}{% endif %}</h4>
+            <div class="row">
+                <div class="col-">
+                    <table class="table table-sm table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 20%;">学籍番号</th>
+                            <th scope="col" style="width: 20%;">氏名</th>
+                            <th scope="col" style="width: 20%;">合計時間</th>
+                            <th scope="col" style="width: 20%;">目標時間</th>
+                            <th scope="col" style="width: 20%;">残り時間</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+            {% for key, value in student_list.d_list.items %}
+                            <tr data-href="{% url 'incampusApp:each_student_data' u_id=key %}">
+                                <td>
+                                    {{ key }}
+                                </td>
+                                <td>
+                                    {{ value.0 }}
+                                </td>
+                                <td>
+                                    {{ value.1 }}:{{ value.2 }}
+                                </td>
+                                <td>
+                                    {{ value.3 }}:00
+                                </td>
+                                <td>
+                                    {{ value.4 }}:{{ value.5 }}
+                                </td>
+                            </tr>
+            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        {% else %}
+            <p>担当している学生のデータは存在しません</p>
+        {% endif %}
+    {% endif %}
+{% else %}
+<div class="mb-5 back-img" style="height: 500px;"></div>
+<div class="row mt-5 text-center" style="bottom: 50%;">
+        <div class="col">
+            <a class="p-3 btn btn-outline-primary btn-lg" role="button" href="{% url 'incampusApp:login' 0 %}">学生</a>
+        </div>
+        <div class="col">
+            
+        </div>
+        <div class="col">
+            <a class="p-3 btn btn-outline-primary btn-lg" role="button" href="{% url 'incampusApp:login' 1 %}">教員</a>
+        </div>
+</div>
+{% endif %}
+{% endblock content %}
+
+{% block script %}
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+<script type="text/javascript" src="{% static 'js/incampus.js' %}"></script>
+<script src="{% static 'd3/d3.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'c3/c3.min.js' %}"></script>
+<script>
+    let ttd = JSON.parse('{{ ttd | safe}}');
+    let egt = JSON.parse('{{ egt | safe }}');
+    const aryMax = function (a, b) {return Math.max(a, b);}
+    let maxTime = ttd.reduce(aryMax);
+    ttd.sort();
+    let chart = c3.generate({
+      bindto: '#all-user-graph',
+      size: { width: '', height: 350 }, // グラフ描画領域のサイズ
+      data: {
+        columns: ttd,
+        type: 'bar',
+        labels: true // それぞれの点に数値を表示
+      },
+      bar: {
+          width: {
+              ratio: 0.8,
+          }
+      },
+      axis: {
+        y: {
+            label: '合計在室時間[h]'
+        },
+      },
+      grid: {
+        y: {
+            lines: [
+                {value: egt.S, class: 'grid500', text: '学部'}, 
+                {value: egt.M, class: 'grid500', text: '修士'}
+            ]
+        }
+    }
+    });
+    chart.axis.max(egt.S);
+    setTimeout(function(){
+        chart.axis.max(egt.M);
+    }, 500);
+    setTimeout(function() {
+        chart.axis.max(maxTime);
+    }, 1500);
+</script>
+{% endblock script %}
